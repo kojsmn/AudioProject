@@ -22,7 +22,7 @@ module AudioRecorder(
   input rst
 );
 
-reg [15:0]a[23999:0];
+reg [15:0]a[1999:0];
 wire [6:0] myclock;
 wire RST;
 assign RST = KEY[0];
