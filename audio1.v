@@ -19,10 +19,16 @@ module AudioRecorder(
   output AUD_DACDAT,  // Audio CODEC DAC Data
   inout	 AUD_BCLK,    // Audio CODEC Bit-Stream Clock
   output AUD_XCK,     // Audio CODEC Chip Clock
+  output reg [15:0]SRAM_DQ,
+  output reg [17:0]SRAM_ADDR,
+  output reg SRAM_WE_N,
+  output reg SRAM_UB_N,
+  output reg SRAM_LB_N,
+  output reg SRAM_CE_N,
+  output reg SRAM_OE_N,
   input rst
 );
 
-reg [15:0]a[1999:0];
 wire [6:0] myclock;
 wire RST;
 assign RST = KEY[0];
@@ -85,8 +91,14 @@ audio_converter u5(
 	.AUD_inL(audio_inL),
 	.AUD_inR(audio_inR),
 	.SW(SW[17]),
-	.a(a),
-	.rst(rst)
+	.SRAM_DQ(SRAM_DQ),
+   .SRAM_ADDR(SRAM_ADDR),
+   .SRAM_WE_N(SRAM_WE_N),
+   .SRAM_UB_N(SRAM_UB_N),
+   .SRAM_LB_N(SRAM_LB_N),
+   .SRAM_CE_N(SRAM_CE_N),
+   .SRAM_OE_N(SRAM_OE_N),
+   .rst(rst)
 );
 
 endmodule
