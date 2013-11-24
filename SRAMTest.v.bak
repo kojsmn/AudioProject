@@ -1,0 +1,43 @@
+module SRAMTest(
+	input [17:0]SW,
+	inout  [15:0] SRAM_DQ,   // SRAM Data bus 16 Bits
+   output [17:0] SRAM_ADDR, // SRAM Address bus 18 Bits
+   output SRAM_UB_N,        // SRAM High-byte Data Mask
+   output SRAM_LB_N,        // SRAM Low-byte Data Mask 
+   output SRAM_WE_N,    // SRAM Write Enable
+   output SRAM_CE_N,        // SRAM Chip Enable
+   output SRAM_OE_N,        // SRAM Output Enable
+	output  [17:0]  LEDR,  //  LED Red[17:0]
+	input CLOCK_50
+	)
+	
+	reg firstTime;
+	reg [17:0]mem_addr;
+	
+	assign SRAM_ADDR = mem_addr;
+   assign SRAM_UB_N = 1'b0;        // SRAM High-byte Data Mask
+   assign SRAM_LB_N = 1'b0;        // SRAM Low-byte Data Mask 
+   assign SRAM_CE_N = 1'b0;        // SRAM Chip Enable
+   assign SRAM_OE_N = 1'b0;        // SRAM Output Enable
+	
+	always @(posedge CLOCK_50 or posedge KEY[3] or posedge KEY[2])
+	begin
+	   if(KEY[3])
+		begin
+		  mem_addr=1'b0;
+		  firstTime=1'b1
+		end
+		else if(KEY[2] && firstTime==1'b1)
+		begin
+		  firstTime=1'b0;
+		  mem_addr=mem_addr+1;
+		end
+		else if(!KEY[2] && firstTime==1'b0)
+		begin
+		  firstTime=1'b1;
+		end
+		SRAM_DQ <= SW[15:0];
+		SRAM_WE_N <= SW[17];
+		LEDR=SRAM_DQ;
+	end
+endmodule
